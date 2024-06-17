@@ -1,0 +1,48 @@
+services:
+  kafka-0:
+    container_name: kafka_test_node_1
+    image: docker.io/bitnami/kafka:3.7
+    ports:
+      #      - "9092:9092"  # Проброс порта для внутренних подключений
+      #      - "9093:9093"  # Проброс порта для контроллера
+      - "9094:9094"  # Проброс порта для внешних подключений
+    volumes:
+      - kafka_test_data:/bitnami
+    environment:
+      # KRaft settings
+      - KAFKA_CFG_NODE_ID=0  # Уникальный идентификатор узла Kafka.
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker  # Узел действует как контроллер и брокер.
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093  # Определение узлов-контроллеров в кворуме. Здесь указано, что узел с ID 0 (этот узел) находится по адресу kafka-0:9093.
+
+      # Listeners (PLAINTEXT, CONTROLLER, EXTERNAL) внутри Docker и для внешних соединений. Формат параметра: <protocol>://<host>:<port>
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094  # Определяет, что брокер будет прослушивать на портах 9092 (PLAINTEXT), 9093 (CONTROLLER), и 9094 (EXTERNAL).
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-0:9092,EXTERNAL://127.0.0.1:9094  # Объявляет клиентам адрес для соединения: порт 9092 на текущем хосте для внутреннего подключения и порт 9094 для внешнего.
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER  # Определяет имя слушателя CONTROLLER для ролей контроллера.
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT  # Устанавливает имя слушателя PLAINTEXT для межброкерного общения.
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT  # Устанавливает, что все слушатели будут использовать протокол PLAINTEXT (без шифрования).
+
+      # Disable auto creation of topics in production
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"  # Максимум 0.5 CPU
+          memory: "1g"  # Максимум 1 GB RAM
+        reservations:
+          cpus: "0.25"  # Минимум 0.25 CPU
+          memory: "512m"  # Минимум 512 MB RAM
+
+  kafka-ui:
+    container_name: kafka_test_ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka-0:9092  # Использует внутренний адрес для подключения к Kafka
+      - KAFKA_CLUSTERS_0_NAME=kraft
+    depends_on:
+      kafka-0:
+        condition: service_started
+volumes:
+  kafka_test_data:
+    driver: local  # Драйвер по умолчанию (локальное хранилище)
