@@ -17,7 +17,8 @@ consumer = KafkaConsumer(
     # Начинаем читать с самого начала, если нет смещений
     enable_auto_commit=True,
     # Автоматически подтверждаем обработанные сообщения
-    group_id=kafka_consumer_cfg.group_id,  # Идентификатор группы консюмеров
+    group_id=kafka_consumer_cfg.group_id,
+    # Идентификатор группы консюмеров (у них общий offset)
     value_deserializer=json_serializer)
 
 # Бесконечный цикл для чтения сообщений
