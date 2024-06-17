@@ -4,7 +4,7 @@ import time
 
 from kafka import KafkaProducer
 
-from config import kafka_cfg
+from config import kafka_producer_cfg
 
 
 # Функция для сериализации данных в формат JSON
@@ -14,7 +14,7 @@ def json_serializer(data):
 
 # Инициализация Kafka-продюсера
 producer = KafkaProducer(
-    bootstrap_servers=[kafka_cfg.uri],
+    bootstrap_servers=[kafka_producer_cfg.uri],
     value_serializer=json_serializer
 )
 
@@ -41,7 +41,7 @@ try:
         message = generate_message()
         # В этом случае мы отправляем сообщение асинхронно и добавляем колбэки
         # для обработки результата отправки.
-        producer.send(kafka_cfg.topic, value=message).add_callback(
+        producer.send(kafka_producer_cfg.topic, value=message).add_callback(
             on_send_success).add_errback(on_send_error)
 
         # Задержка в 1 секунду перед отправкой следующего сообщения

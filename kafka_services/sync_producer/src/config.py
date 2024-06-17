@@ -13,4 +13,4 @@ class KafkaProducerConfig(BaseSettings):
         return f'{self.host}:{self.port}'
 
 
-kafka_cfg = KafkaProducerConfig()
+kafka_producer_cfg = KafkaProducerConfig()

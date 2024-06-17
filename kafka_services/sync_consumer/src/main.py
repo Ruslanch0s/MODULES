@@ -1,6 +1,8 @@
-from kafka import KafkaConsumer
 import json
-from config import kafka_cfg
+
+from kafka import KafkaConsumer
+
+from config import kafka_consumer_cfg
 
 
 def json_serializer(data):
@@ -9,13 +11,13 @@ def json_serializer(data):
 
 # Инициализация Kafka-консюмера
 consumer = KafkaConsumer(
-    kafka_cfg.topic,  # Тема, из которой читаем сообщения
-    bootstrap_servers=[kafka_cfg.uri],
+    kafka_consumer_cfg.topic,  # Тема, из которой читаем сообщения
+    bootstrap_servers=[kafka_consumer_cfg.uri],
     auto_offset_reset='earliest',
     # Начинаем читать с самого начала, если нет смещений
     enable_auto_commit=True,
     # Автоматически подтверждаем обработанные сообщения
-    group_id='rfid_group',  # Идентификатор группы консюмеров
+    group_id=kafka_consumer_cfg.group_id,  # Идентификатор группы консюмеров
     value_deserializer=json_serializer)
 
 # Бесконечный цикл для чтения сообщений

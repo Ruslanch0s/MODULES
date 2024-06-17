@@ -4,7 +4,7 @@ import time
 
 from kafka import KafkaProducer
 
-from config import kafka_cfg
+from config import kafka_producer_cfg
 
 
 # Функция для сериализации данных в формат JSON
@@ -14,7 +14,7 @@ def json_serializer(data):
 
 # Инициализация Kafka-продюсера
 producer = KafkaProducer(
-    bootstrap_servers=[kafka_cfg.uri],
+    bootstrap_servers=[kafka_producer_cfg.uri],
     value_serializer=json_serializer
 )
 
@@ -28,7 +28,7 @@ def generate_message():
 try:
     while True:
         message = generate_message()
-        future = producer.send(kafka_cfg.topic, value=message)
+        future = producer.send(kafka_producer_cfg.topic, value=message)
 
         try:
             result = future.get(
