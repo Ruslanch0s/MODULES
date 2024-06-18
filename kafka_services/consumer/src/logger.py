@@ -2,7 +2,7 @@ import logging
 from sys import stdout
 
 # Define logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('Main logger')
 
 logger.setLevel(logging.DEBUG)  # set logger level
 logFormatter = logging.Formatter \

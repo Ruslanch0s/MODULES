@@ -23,6 +23,10 @@ services:
 
       # Disable auto creation of topics in production
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+
+#      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=3  # Определяет фактор репликации для темы __consumer_offsets, которая используется для хранения смещений консумеров. В данном случае, каждый сегмент будет реплицироваться на трех брокерах, что обеспечивает высокую доступность и устойчивость.
+#      - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=3  # Указывает фактор репликации для журнала состояния транзакций, что важно для обеспечения надежности транзакций в Kafka. Определяет, что каждый сегмент журнала транзакций будет реплицироваться на трех брокерах.
+#      - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=2  # Устанавливает минимальное количество синхронных реплик (ISR, In-Sync Replicas), которые должны подтвердить запись до завершения транзакции. В данном случае, как минимум две из трех реплик должны подтвердить запись, чтобы транзакция считалась успешной.
     deploy:
       resources:
         limits:
@@ -43,6 +47,8 @@ services:
     depends_on:
       kafka-0:
         condition: service_started
+
+
 volumes:
   kafka_test_data:
     driver: local  # Драйвер по умолчанию (локальное хранилище)
