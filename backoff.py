@@ -1,5 +1,5 @@
-import time
 import functools
+import time
 
 
 def backoff(start_sleep_time=0.1, factor=2, max_sleep_time=10, max_attempts=5,
@@ -27,8 +27,8 @@ def backoff(start_sleep_time=0.1, factor=2, max_sleep_time=10, max_attempts=5,
                     attempts += 1
                     if attempts >= max_attempts:
                         raise
-                    print(
-                        f"Exception occurred: {e}. Retrying in {sleep_time} seconds...")
+                    print(f"Exception occurred: {e}. "
+                          f"Retrying in {sleep_time} seconds...")
                     time.sleep(sleep_time)
                     sleep_time = min(sleep_time * factor, max_sleep_time)
 
