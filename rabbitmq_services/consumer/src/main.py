@@ -29,7 +29,7 @@ if __name__ == '__main__':
         print(f" [x] Received {body}")
 
 
-    channel.basic_consume(queue='test_queue',
+    channel.basic_consume(queue='rfid_queue',
                           auto_ack=True,
                           on_message_callback=callback)
 

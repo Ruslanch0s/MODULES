@@ -4,9 +4,11 @@ from pydantic_settings import BaseSettings
 
 
 class RabbitMqConfig(BaseSettings):
-    servers: list = Field(alias='KAFKA_SERVERS')
-    topic: str = Field(alias='KAFKA_TOPIC')
-    group_id: str = Field(alias='KAFKA_GROUP_ID')
+    username: str = Field(alias='RABBITMQ_USERNAME')
+    password: str = Field(alias='RABBITMQ_PASSWORD')
+    host: str = Field(default='localhost', alias='RABBITMQ_HOST')
+    port: int = Field(default=5672, alias='RABBITMQ_PORT')
+    queue: str = Field(alias='RABBITMQ_QUEUE')
 
 
 rabbitmq_cfg = RabbitMqConfig()
