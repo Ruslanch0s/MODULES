@@ -1,0 +1,37 @@
+services:
+  kafka-0:
+    container_name: kafka_test_node_1
+    image: docker.io/bitnami/kafka:3.7
+    ports:
+      #      - "9092:9092"  # Проброс порта для внутренних подключений
+      #      - "9093:9093"  # Проброс порта для контроллера
+      - "9094:9094"  # Проброс порта для внешних подключений
+    volumes:
+      - kafka_test_data:/bitnami
+    environment:
+      -
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"  # Максимум 0.5 CPU
+          memory: "1g"  # Максимум 1 GB RAM
+        reservations:
+          cpus: "0.25"  # Минимум 0.25 CPU
+          memory: "512m"  # Минимум 512 MB RAM
+
+  kafka-ui:
+    container_name: kafka_test_ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka-0:9092  # Использует внутренний адрес для подключения к Kafka
+      - KAFKA_CLUSTERS_0_NAME=kraft
+    depends_on:
+      kafka-0:
+        condition: service_started
+
+
+volumes:
+  kafka_test_data:
+    driver: local  # Драйвер по умолчанию (локальное хранилище)

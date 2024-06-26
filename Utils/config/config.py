@@ -7,6 +7,7 @@ class KafkaConfig(BaseSettings):
     servers: list = Field(alias='KAFKA_SERVERS')
     topic: str = Field(alias='KAFKA_TOPIC')
     group_id: str = Field(alias='KAFKA_GROUP_ID')
+    list_example: list[str] = '["01648992"]'  # LIST_EXAMPLE='["01648992"]'
 
 
 kafka_cfg = KafkaConfig()
