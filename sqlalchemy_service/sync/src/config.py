@@ -7,7 +7,7 @@ class PostgresConfig(BaseSettings):
     port: int = Field(alias='POSTGRES_PORT')
     user: str = Field(alias='POSTGRES_USER')
     password: str = Field(alias='POSTGRES_PASSWORD')
-    database: str = Field(alias='POSTGRES_DATABASE')
+    database: str = Field(alias='POSTGRES_DB')
 
     @property
     def uri(self) -> str:
