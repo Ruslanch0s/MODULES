@@ -1,5 +1,6 @@
 # Информационная панель
 
+
 > Уведомляет о новых письмах в ТГ. Возможность подключения нескольких почтовых
 > ящиков.
 ### Gitlab: https://gitlab.port-tranzit.ru/pt-sandbox/baracode_informer_PT.git
